@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Age calculator app</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,700;0,800;1,400;1,700;1,800&display=swap');
+        .bg {
+            background-color: hsl(0, 0%, 8%);
+            color: #ff5757
+        }
+        body{
+            font-family: 'Poppins', sans-serif;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body class="bg-[#dbdbdb] min-h-screen flex items-center justify-center ">
+    <form class="bg-white rounded-3xl rounded-br-[100px] w-[90%] md:w-[50%]  min-h-[50vh] p-4 md:p-10 " onsubmit="return false;">
+        <div class="flex items-center gap-x-1 sm:gap-x-2 md:gap-x-6 mb-8">
+            <div class="">
+                <p class="text-sm text-[#716f6f] font-bold">DAY</p>
+                <input type="number" placeholder="DD"
+                    class="max-w-[100px] border border-gray-300 rounded-md p-3 mt-2 font-bold focus:border-[#854dff] outline-none"
+                    id="day">
+                <p id="warningDay" class="text-[#ff5757] text-xs"></p>
+            </div>
+
+            <div class="">
+                <p class="text-sm text-[#716f6f] font-bold">MONTH</p>
+                <input type="number" placeholder="YY"
+                    class="border border-gray-300 rounded-md p-3 max-w-[100px] mt-2 font-bold focus:border-[#854dff] outline-none"
+                    id="month">
+                <p id="warningMonth" class="text-[#ff5757] text-xs"></p>
+            </div>
+
+            <div class="text-sm">
+                <p class="text-[#716f6f] text-sm font-bold">YEAR</p>
+                <input type="number" placeholder="YY"
+                    class="border border-gray-300 rounded-md p-3 max-w-[100px] mt-2 font-bold focus:border-[#854dff] outline-none"
+                    id="year">
+                <p id="warningYear" class="text-[#ff5757] text-xs"></p>
+            </div>
+
+        </div>
+
+
+
+        <div class="flex items-center relative my-[50px] md:my-[unset]">
+            <div class="border-b text-gray-200 w-full"></div>
+            <button type="button" onclick="submitHandler()">
+                <img src="/assets/images/icon-arrow.svg" alt="arrow_bottom"
+                    class="ml-auto bg-[#854dff] hover:bg-black rounded-full w-16 h-16 p-3 cursor-pointer absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:relative md:left-[unset] md:top-[unset] md:translate-x-[unset] md:translate-y-[unset]">
+            </button>
+        </div>
+
+        <h1 class="text-5xl md:text-7xl font-bold italic"><span class="text-[#854dff]" id="resultyear">--</span> years</h1>
+        <h1 class="text-5xl md:text-7xl font-bold italic"><span class="text-[#854dff]" id="resultmonth">--</span> months</h1>
+        <h1 class="text-5xl md:text-7xl font-bold italic"><span class="text-[#854dff]" id="resultday">--</span> days</h1>
+    </form>
+    <script>
+        function submitHandler() {
+
+            const day = document.getElementById('day');
+            const month = document.getElementById('month');
+            const year = document.getElementById('year');
+            const warningDay = document.getElementById('warningDay')
+            const warningMonth = document.getElementById('warningMonth')
+            const warningYear = document.getElementById('warningYear')
+            let isValid = {
+                date: false,
+                month: false,
+                yer: false
+            };
+            if (!day?.value) {
+                warningDay.textContent = "This field is required"
+                isValid.date = false;
+            }
+            else if (day.value > 31 || day.value < 1) {
+                warningDay.textContent = "Must be a valid day"
+                isValid.date = false
+            } else if (day.value > arr[(+month.value) - 1]) {
+                warningDay.textContent = "Must be a valid day"
+                isValid.date = false
+            }
+            else {
+                warningDay.textContent = ""
+                isValid.date = true
+            }
+            if (!month?.value) {
+                warningMonth.textContent = "This field is required"
+                isValid, month = false
+
+            }
+            else if (+month.value > 12 || +month.value < 1) {
+                warningMonth.textContent = "Must be a valid Month"
+                isValid.month = false
+            }
+            else {
+                warningMonth.textContent = ""
+                isValid.month = true
+            }
+            if (!year?.value) {
+                warningYear.textContent = "This field is required"
+                isValid.year = false
+            }
+            else if (+year?.value > +(new Date().getFullYear())) {
+                warningYear.textContent = "Must be a valid year"
+                isValid.year = false
+            }
+            else {
+                warningYear.textContent = ""
+                isValid.year = true
+            }
+
+            if (isValid.date && isValid.month && isValid.year) {
+                let DAY = +day.value;
+                let MONTH = +month.value;
+                let YEAR = +year.value;
+                let todayDate = +(new Date().getDate());
+                let todayMonth = +(new Date().getMonth()) + 1;
+                let todayYear = +((new Date()).getUTCFullYear())
+                let days = 0, months = 0; years = 0
+
+                if (todayDate < DAY) {
+                    todayDate = todayDate + arr[MONTH - 1]
+                    todayMonth--;
+                }
+                days = todayDate - DAY;
+
+                if (todayMonth < MONTH) {
+                    todayMonth += 12;
+                    todayYear--
+                }
+                months = todayMonth - MONTH
+                years = todayYear - YEAR;
+                console.log(years, months, days)
+                document.getElementById('resultyear').textContent = years;
+                document.getElementById('resultmonth').textContent = months;
+                document.getElementById('resultday').textContent = days;
+
+
+            } else {
+
+                document.getElementById('resultyear').textContent = "--";
+                document.getElementById('resultmonth').textContent = "--";
+                document.getElementById('resultday').textContent = "--";
+
+
+            }
+
+
+
+
+
+
+        }
+
+        const arr = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    </script>
+</body>
+
+</html>
